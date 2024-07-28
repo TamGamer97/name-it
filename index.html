@@ -13,6 +13,8 @@
 
     <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
 
+        <h1 class="arrow" onclick="cycleHints('up')" style="position: absolute; margin-bottom: 200px; z-index: 1000;">&uarr;</h1>
+        <h1 class="arrow" onclick="cycleHints('down')" style="position: absolute; margin-top: 150px; z-index: 1000;">&darr;</h1>
         <div id="cont" style="width: 650px; height: 350px; transition: 1s; display: flex; justify-content: center; align-items: center; flex-direction: column;">
             <!-- <h1 style="text-align: center; transition: 1s; position: absolute; font-size: 45px; margin-bottom: 50px;"> <span style="color: #5A33C8;">Quote 1:</span> <span style="color: #8D65FF;">"Hello"</span></h1> -->
             <!-- <h1 style="text-align: center; transition: 1s; position: absolute; font-size: 40px;"> <span style="color: #5A33C8;">Quote 1:</span> <span style="color: #8D65FF;">"Hello"</span></h1>
@@ -187,7 +189,18 @@
         const container = document.getElementById('cont').children
         var lastFontSize = '50px';
 
+        if(currentHintView < hintCount)
+        {
+            var n = 0
+            while (n <= hintCount - currentHintView)
+            {
+                cycleHints('down')
+                n++
+            }   
+        }
+
         hintCount ++
+        currentHintView ++
 
         for (n in container)
         {
@@ -198,6 +211,7 @@
                 const newBottomMargin = (parseInt((textElem.style.marginBottom).split('px')[0])) + 100
                 console.log(newBottomMargin)
                 textElem.style.marginBottom = newBottomMargin + 'px'
+                textElem.style.opacity = 0
                 
                 lastFontSize = textElem.style.fontSize
             }catch{
@@ -208,7 +222,7 @@
         if(hintCount == 4)
         {
             newHintTxt.style = "text-align: center; transition: 1s; position: absolute; opacity: 0; font-size: 45px; margin-bottom: 00px;"
-            newHintTxt.innerHTML = ' <span style="color: #5A33C8;">Actor/Actress:</span> <span style="color: #8D65FF;">"'+movieData['Actor/Actress']+'"</span>'
+            newHintTxt.innerHTML = ' <span style="color: #5A33C8;">Bonus Hint (Actor/Actress):</span> <span style="color: #8D65FF;">"'+movieData['Actor/Actress']+'"</span>'
             document.getElementById('cont').appendChild(newHintTxt)
 
             document.getElementById('hintBtn').style.opacity = 0.7
@@ -224,7 +238,7 @@
         setTimeout(() => {
             newHintTxt.style.opacity = 1
             newHintTxt.style.marginBottom = '50px'
-            newHintTxt.style.fontSize = ((parseInt((lastFontSize).split('px')[0])) - 5) + 'px'
+            // newHintTxt.style.fontSize = ((parseInt((lastFontSize).split('px')[0])) - 5) + 'px'
         },10 )
 
     }
@@ -233,11 +247,6 @@
     function guessMovie()
     {
         const guessName = document.getElementById('movie').value
-
-        if(guessName == '')
-        {
-            return
-        }
 
         guessesLeft -= 1
 
@@ -268,13 +277,17 @@
             }, 500);
 
 
-            if(guessesLeft == 3)
+            if(guessName != '')
             {
 
-                document.getElementById('incorrectGuess').innerHTML = '<span style="text-decoration-line: underline; text-decoration-color: #a8323c;">'+guessName+'</span>' 
-            }else{
-                document.getElementById('incorrectGuess').innerHTML = document.getElementById('incorrectGuess').innerHTML + ', <span style="text-decoration-line: underline; text-decoration-color: #a8323c;">'+guessName+'</span>' 
-
+                if(guessesLeft == 3)
+                {
+    
+                    document.getElementById('incorrectGuess').innerHTML = '<span style="text-decoration-line: underline; text-decoration-color: #a8323c;">'+guessName+'</span>' 
+                }else{
+                    document.getElementById('incorrectGuess').innerHTML = document.getElementById('incorrectGuess').innerHTML + ', <span style="text-decoration-line: underline; text-decoration-color: #a8323c;">'+guessName+'</span>' 
+    
+                }
             }
         }
         
@@ -313,6 +326,76 @@
 
         document.getElementById('cont').style.display = 'none'
         document.getElementById('MovieImg').style.display = 'flex'
+    }
+
+    var currentHintView = 0
+    function cycleHints(direction)
+    {
+        if(direction == 'up')
+        {
+            if(currentHintView == 1)
+            {
+                return
+            }
+
+            currentHintView -= 1
+            const container = document.getElementById('cont').children
+            var lastFontSize = '50px';
+    
+            for (n in container)
+            {
+                try{
+    
+                    const textElem = container[n]
+                    console.log(textElem.style.marginBottom)
+                    const newBottomMargin = (parseInt((textElem.style.marginBottom).split('px')[0])) - 100
+                    console.log(newBottomMargin)
+                    textElem.style.marginBottom = newBottomMargin + 'px'
+                    textElem.style.opacity = 0
+                    
+                    lastFontSize = textElem.style.fontSize
+                }catch{
+    
+                }
+            }
+
+            console.log(container)
+            console.log(currentHintView)
+            console.log(container[currentHintView-1].style.opacity = 1)
+
+        }
+        if(direction == 'down')
+        {
+            if(hintCount <= currentHintView)
+            {
+                return
+            }
+
+            currentHintView += 1
+            const container = document.getElementById('cont').children
+            var lastFontSize = '50px';
+    
+            for (n in container)
+            {
+                try{
+    
+                    const textElem = container[n]
+                    console.log(textElem.style.marginBottom)
+                    const newBottomMargin = (parseInt((textElem.style.marginBottom).split('px')[0])) + 100
+                    console.log(newBottomMargin)
+                    textElem.style.marginBottom = newBottomMargin + 'px'
+                    textElem.style.opacity = 0
+                    
+                    lastFontSize = textElem.style.fontSize
+                }catch{
+    
+                }
+            }
+
+            console.log(container)
+            console.log(currentHintView)
+            console.log(container[currentHintView-1].style.opacity = 1)
+        }
     }
 
 
@@ -398,5 +481,13 @@
 
 .suggestions-list li:hover {
     background: #323a5c;
+}
+.arrow{
+    color: #8D65FF;
+    cursor: pointer;
+    opacity: 0.5;
+}
+.arrow:hover{
+    opacity: 0.8;
 }
 </style>
