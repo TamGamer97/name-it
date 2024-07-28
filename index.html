@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1 style="color: #8D65FF; text-align: center; font-size: 70px" >NAME IT!</h1>
+
+    <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+
+        <div id="cont" style="width: 650px; height: 350px; transition: 1s; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <!-- <h1 style="text-align: center; transition: 1s; position: absolute; font-size: 45px; margin-bottom: 50px;"> <span style="color: #5A33C8;">Quote 1:</span> <span style="color: #8D65FF;">"Hello"</span></h1> -->
+            <!-- <h1 style="text-align: center; transition: 1s; position: absolute; font-size: 40px;"> <span style="color: #5A33C8;">Quote 1:</span> <span style="color: #8D65FF;">"Hello"</span></h1>
+            <h1 style="text-align: center; transition: 1s; position: absolute; font-size: 35px;"> <span style="color: #5A33C8;">Quote 1:</span> <span style="color: #8D65FF;">"Hello"</span></h1>
+            <h1 style="text-align: center; transition: 1s; position: absolute; font-size: 30px;"> <span style="color: #5A33C8;">Quote 1:</span> <span style="color: #8D65FF;">"Hello"</span></h1> -->
+    
+        </div>
+
+        <img src="" id="MovieImg" style="width: 550px; display: none;">
+
+        <div style="width: 100%; height: 150px; position: absolute; bottom: 30px; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+
+            <div id="gameInpts" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+                <div id="hintBtn" onclick="nextHint()" class="btn" style="width: 100px; height: 50px; border-radius: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 1s; display: none;">
+                    <h1 class="btnTxt" style="font-size: 20px; text-align: center; height: 100%; width: 100%; padding-top: 20px; transition: 1s;">Hint</h1>
+                </div>
+    
+                <div style=" display: flex; flex-direction: row; gap: 10px; margin-top: 20px;">
+                    <input list="movies" id="movie" type="text" placeholder="Guess a movie..." style="border: none; outline: none; border-radius: 20px; background-color: #262E4A; width: 450px; height: 45px; padding-left: 20px; color: #5A33C8; font-size: 20px;">
+                    <datalist id="movies"></datalist>
+    
+                    <div onclick="guessMovie()" class="btn" id="guessBtn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; ">
+                        <h1 class="btnTxt" style="font-size: 20px; text-align: center; transition: 1s;">Guess</h1>
+                    </div>
+                    <div onclick="location.reload()" class="btn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; display: none;">
+                        <h1 class="btnTxt" style="font-size: 20px; text-align: center; height: 100%; width: 100%; transition: 1s; padding-bottom: 20px;">Skip</h1>
+                    </div>
+                </div>
+    
+                <h1 id="guessRemaining" style="font-size: 20px; color: #5A33C8; opacity: 0.7; text-align: center; height: 100%; width: 100%; transition: 1s;">4 Guesses Left</h1>
+                <h1 id="incorrectGuess" style="font-size: 20px; color: #5A33C8; opacity: 0.7; text-align: center; height: 100%; width: 100%; transition: 1s; margin-top: -10px; margin-bottom: -20px;"></h1>
+
+            </div>
+
+            <div id="resultsInpts" style="display: none; justify-content: center; flex-direction: column; align-items: center;">
+                <h1 id="movieName" style="font-size: 30px; color: #5A33C8; text-align: center; height: 100%; width: 100%; transition: 1s;">Movie Name</h1>
+
+                <div onclick="location.reload()" class="btn" style="width: 150px; height: 50px; border-radius: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 1s;">
+                    <h1 class="btnTxt" style=" font-size: 20px; text-align: center; height: 100%; width: 100%; padding-top: 20px; transition: 1s;">Next Game</h1>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+    
+</body>
+<script>
+
+    var movieData = []
+
+    function loadRandomGame()
+    {
+        fetch('moviesDatabase.json')
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+
+
+            const randomIndx = (Math.floor(Math.random() * data.length))
+            movieData = data[randomIndx]
+
+            document.getElementById('MovieImg').src = movieData.ImageURL
+            document.getElementById('movieName').innerHTML = movieData.Name
+
+            nextHint()
+            // Do something with your data
+        })
+    }
+    loadRandomGame()
+
+    function loadMoviesSuggestions()
+    {
+        const movies = [
+            "The Shawshank Redemption",
+            "The Godfather",
+            "The Dark Knight",
+            "Pulp Fiction",
+            "Bullet Train",
+            "The Lord of the Rings: The Return of the King",
+            "Forrest Gump",
+            "Deadpool & Wolverine",
+            "Inception",
+            "Fight Club",
+            "The Matrix",
+            "Goodfellas",
+            "Star Wars: Episode IV - A New Hope",
+            "The Silence of the Lambs",
+            "Saving Private Ryan",
+            "Schindler's List",
+            "Interstellar",
+            "Gladiator",
+            "The Lion King",
+            "Jurassic Park",
+            "Titanic",
+            "The Green Mile",
+            "12 Angry Men",
+            "The Good, the Bad and the Ugly",
+            "The Lord of the Rings: The Fellowship of the Ring",
+            "Star Wars: Episode V - The Empire Strikes Back",
+            "City of God",
+            "Se7en",
+            "It's a Wonderful Life",
+            "Life Is Beautiful",
+            "The Usual Suspects",
+            "Léon: The Professional",
+            "Spirited Away",
+            "Once Upon a Time in the West",
+            "American History X",
+            "Casablanca",
+            "City Lights",
+            "Psycho",
+            "The Intouchables",
+            "Modern Times",
+            "Raiders of the Lost Ark",
+            "Rear Window",
+            "The Departed",
+            "Terminator 2: Judgment Day",
+            "Back to the Future",
+            "Whiplash",
+            "Memento",
+            "The Prestige",
+            "Apocalypse Now",
+            "Alien",
+            "Sunset Boulevard",
+            "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+            "The Great Dictator",
+            "Cinema Paradiso",
+            "The Lives of Others",
+            "Grave of the Fireflies",
+            "Paths of Glory",
+            "Django Unchained",
+            "The Shining",
+            "WALL·E",
+            "American Beauty",
+            "The Dark Knight Rises",
+            "Princess Mononoke",
+            "Oldboy",
+            "Aliens",
+            "Witness for the Prosecution",
+            "Once Upon a Time in America",
+            "Das Boot",
+            "Citizen Kane",
+            "Vertigo",
+            "North by Northwest",
+            "Star Wars: Episode VI - Return of the Jedi",
+            "Reservoir Dogs",
+            "Braveheart",
+            "M",
+            "Requiem for a Dream",
+            "Amélie",
+            "A Clockwork Orange",
+            "Like Stars on Earth",
+            "Taxi Driver",
+            "Lawrence of Arabia",
+            "Double Indemnity",
+            "Eternal Sunshine of the Spotless Mind",
+            "Amadeus",
+            "To Kill a Mockingbird",
+            "Toy Story 3",
+            "Logan",
+            "Full Metal Jacket",
+            "Dangal",
+            "The Sting",
+            "2001: A Space Odyssey",
+            "Singin' in the Rain",
+            "Toy Story",
+            "Bicycle Thieves",
+            "The Kid",
+            "Inglourious Basterds",
+            "Snatch",
+            "3 Idiots",
+            "Monty Python and the Holy Grail",
+            "L.A. Confidential",
+            "For a Few Dollars More",
+            "Scarface",
+            "The Hunt",
+            "Good Will Hunting",
+            "A Separation",
+            "Indiana Jones and the Last Crusade",
+            "My Neighbor Totoro",
+            "Metropolis",
+            "The Apartment",
+            "Rashomon",
+            "A Beautiful Mind",
+            "All About Eve",
+            "The Treasure of the Sierra Madre",
+            "Yojimbo",
+            "Batman Begins",
+            "Some Like It Hot",
+            "The Great Escape",
+            "Up",
+            "Unforgiven",
+            "Raging Bull",
+            "Die Hard",
+            "Heat",
+            "The Third Man",
+            "Children of Heaven",
+            "The Secret in Their Eyes",
+            "Ikiru",
+            "Pan's Labyrinth",
+            "My Father and My Son",
+            "The Gold Rush",
+            "Chinatown",
+            "V for Vendetta",
+            "The Seventh Seal",
+            "Lock, Stock and Two Smoking Barrels",
+            "Inside Out",
+            "Room",
+            "Howl's Moving Castle",
+            "Blade Runner",
+            "Hotel Rwanda",
+            "Warrior",
+            "The Elephant Man",
+            "Gone with the Wind",
+            "The Sixth Sense",
+            "La La Land",
+            "The Thing",
+            "No Country for Old Men",
+            "Finding Nemo",
+            "Shutter Island",
+            "Kill Bill: Vol. 1",
+            "Mary and Max",
+            "There Will Be Blood",
+            "Platoon",
+            "The Wages of Fear",
+            "Spotlight",
+            "Rush",
+            "Amores Perros",
+            "Mad Max: Fury Road",
+            "Network",
+            "Stand by Me",
+            "Persona",
+            "The Grand Budapest Hotel",
+            "The Big Lebowski",
+            "Gone Girl",
+            "Into the Wild",
+            "A Wednesday",
+            "Ford v Ferrari",
+            "Hacksaw Ridge",
+            "Memories of Murder",
+            "Rocky",
+            "Monsters, Inc.",
+            "Ratatouille",
+            "Catch Me If You Can",
+            "The Wolf of Wall Street",
+            "Before Sunrise",
+            "12 Years a Slave",
+            "Prisoners",
+            "Gran Torino",
+            "The Bourne Ultimatum",
+            "In the Name of the Father",
+            "Andhadhun",
+            "Ben-Hur",
+            "Gandhi",
+            "Harry Potter and the Deathly Hallows: Part 2",
+            "Rang De Basanti",
+            "Lagaan: Once Upon a Time in India",
+            "Swades",
+            "The Iron Giant",
+            "Life of Brian",
+            "The Truman Show",
+            "Blade Runner 2049",
+            "The Terminator",
+            "Guardians of the Galaxy",
+            "The Princess Bride",
+            "The Revenant",
+            "The Avengers",
+            "Dead Poets Society",
+            "Jurassic Park",
+            "Hot Fuzz",
+            "Trainspotting",
+            "The King's Speech",
+            "Gladiator",
+            "Slumdog Millionaire",
+            "The Social Network",
+            "The Imitation Game",
+            "Birdman or (The Unexpected Virtue of Ignorance)",
+            "Her",
+            "The Grand Budapest Hotel",
+            "Gone Girl",
+            "Inside Out",
+            "La La Land",
+            "Mad Max: Fury Road",
+            "Whiplash",
+            "Boyhood",
+            "Spotlight",
+            "The Revenant",
+            "Room",
+            "The Big Short",
+            "The Martian",
+            "The Hateful Eight",
+            "Bridge of Spies",
+            "Ex Machina",
+            "Brooklyn",
+            "The Lobster",
+            "Sicario",
+            "Carol",
+            "Steve Jobs",
+            "Trumbo",
+            "The Danish Girl",
+            "Joy",
+            "Anomalisa",
+            "Creed",
+            "The Good Dinosaur",
+            "Straight Outta Compton",
+            "Me and Earl and the Dying Girl",
+            "The End of the Tour",
+            "Beasts of No Nation",
+            "Tangerine",
+            "Room",
+            "The Witch",
+            "Green Room",
+            "Hail, Caesar!",
+            "10 Cloverfield Lane",
+            "Sing Street",
+            "The Nice Guys",
+            "Everybody Wants Some!!",
+            "Captain Fantastic",
+            "Kubo and the Two Strings",
+            "The Girl on the Train",
+            "Nocturnal Animals",
+            "Paterson",
+            "Elle",
+            "Loving",
+            "The Edge of Seventeen",
+            "Manchester by the Sea",
+            "Moonlight",
+            "Lion",
+            "Hacksaw Ridge",
+            "Fences",
+            "Hidden Figures",
+            "La La Land",
+            "Arrival",
+            "Hell or High Water",
+            "Jackie",
+            "20th Century Women",
+            "Silence",
+            "A Monster Calls",
+            "Florence Foster Jenkins",
+            "Miss Sloane",
+            "Allied",
+            "American Honey",
+            "The Birth of a Nation",
+            "Gold",
+            "Live by Night",
+            "Billy Lynn's Long Halftime Walk",
+            "The Red Turtle",
+            "The Handmaiden",
+            "The Wailing",
+            "Train to Busan",
+            "Your Name.",
+            "Under the Shadow",
+            "The Salesman",
+            "Julieta",
+            "Toni Erdmann",
+            "Neruda",
+            "Embrace of the Serpent",
+            "The Club",
+            "The Clan",
+            "Aquarius",
+            "Ixcanul",
+            "From Afar",
+            "The Second Mother",
+            "The Measure of a Man",
+            "Mustang",
+            "Son of Saul",
+            "The Assassin",
+            "Taxi Tehran",
+            "A War",
+            "The Brand New Testament",
+            "Rams",
+            "The Lobster",
+            "Youth",
+            "45 Years",
+            "Victoria",
+            "The Fencer",
+            "Land of Mine",
+            "A Man Called Ove",
+            "The Treasure",
+            "The Fool",
+            "Court",
+            "The Kindergarten Teacher",
+            "The Postman's White Nights",
+            "Leviathan",
+            "Ida",
+            "Wild Tales",
+            "Timbuktu",
+            "Two Days, One Night",
+            "Winter Sleep",
+            "Mommy",
+            "Force Majeure",
+            "Leviathan",
+            "Wild Tales",
+            "Relatos Salvajes",
+            "Tangerines",
+            "Corn Island",
+            "The Notebook",
+            "Of Horses and Men",
+            "The Tribe",
+            "White God",
+            "Still Life",
+            "The Golden Era",
+            "Blind Massage",
+            "Black Coal, Thin Ice",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            "The Imitation Game",
+            "The Theory of Everything",
+            "American Sniper",
+            "Boyhood",
+            "Whiplash",
+            "The Grand Budapest Hotel",
+            "Birdman",
+            // Add more movie titles here
+        ];
+
+        const datalist = document.getElementById('movies');
+
+        movies.forEach(movie => {
+            const option = document.createElement('option');
+            option.value = movie;
+            datalist.appendChild(option);
+        });
+    }
+    loadMoviesSuggestions()
+
+    var hintCount = 0
+    function nextHint()
+    {
+        const container = document.getElementById('cont').children
+        var lastFontSize = '50px';
+
+        hintCount ++
+
+        for (n in container)
+        {
+            try{
+
+                const textElem = container[n]
+                console.log(textElem.style.marginBottom)
+                const newBottomMargin = (parseInt((textElem.style.marginBottom).split('px')[0])) + 100
+                console.log(newBottomMargin)
+                textElem.style.marginBottom = newBottomMargin + 'px'
+                
+                lastFontSize = textElem.style.fontSize
+            }catch{
+
+            }
+        }
+        const newHintTxt = document.createElement('h1')
+        if(hintCount == 4)
+        {
+            newHintTxt.style = "text-align: center; transition: 1s; position: absolute; opacity: 0; font-size: 45px; margin-bottom: 00px;"
+            newHintTxt.innerHTML = ' <span style="color: #5A33C8;">Actor/Actress:</span> <span style="color: #8D65FF;">"'+movieData['Actor/Actress']+'"</span>'
+            document.getElementById('cont').appendChild(newHintTxt)
+
+            document.getElementById('hintBtn').style.opacity = 0.7
+            document.getElementById('hintBtn').onclick = ''
+
+        }else{
+
+            newHintTxt.style = "text-align: center; transition: 1s; position: absolute; opacity: 0; font-size: 45px; margin-bottom: 00px;"
+            newHintTxt.innerHTML = ' <span style="color: #5A33C8;">Quote '+hintCount+':</span> <span style="color: #8D65FF;">"'+movieData['Quote'+JSON.stringify(hintCount)]+'"</span>'
+            document.getElementById('cont').appendChild(newHintTxt)
+        }
+        
+        setTimeout(() => {
+            newHintTxt.style.opacity = 1
+            newHintTxt.style.marginBottom = '50px'
+            newHintTxt.style.fontSize = ((parseInt((lastFontSize).split('px')[0])) - 5) + 'px'
+        },10 )
+
+    }
+
+    var guessesLeft = 4
+    function guessMovie()
+    {
+        const guessName = document.getElementById('movie').value
+
+        if(guessName == '')
+        {
+            return
+        }
+
+        guessesLeft -= 1
+
+        if(guessName == movieData['Name'])
+        {
+            winGame()
+        }
+        else if(guessesLeft == 0)
+        {
+            loseGame()
+        }else{
+            // incorrect guess but stil has chances left
+            nextHint()
+            document.getElementById('movie').value = ''
+
+            document.getElementById('guessBtn').style.backgroundColor = '#a8323c'
+            document.getElementById('guessBtn').children[0].style.color = 'white'
+            document.getElementById('guessRemaining').style.opacity = 1
+            document.getElementById('guessRemaining').style.color = '#6c45d9'
+            document.getElementById('guessRemaining').style.fontSize = '22px'
+
+            setTimeout(() => {
+                document.getElementById('guessBtn').style.backgroundColor = '#262E4A'
+                document.getElementById('guessBtn').children[0].style.color = '#5A33C8'
+                document.getElementById('guessRemaining').style.opacity = 0.7
+                document.getElementById('guessRemaining').style.color = '#5A33C8'
+                document.getElementById('guessRemaining').style.fontSize = '20px'
+            }, 500);
+
+
+            if(guessesLeft == 3)
+            {
+
+                document.getElementById('incorrectGuess').innerHTML = '<span style="text-decoration-line: underline; text-decoration-color: #a8323c;">'+guessName+'</span>' 
+            }else{
+                document.getElementById('incorrectGuess').innerHTML = document.getElementById('incorrectGuess').innerHTML + ', <span style="text-decoration-line: underline; text-decoration-color: #a8323c;">'+guessName+'</span>' 
+
+            }
+        }
+        
+
+
+        document.getElementById('guessRemaining').innerHTML = guessesLeft + ' Guesses Left'
+    }
+    
+    function winGame()
+    {
+        console.log('Correct')
+
+        document.getElementById('gameInpts').style.display = 'none'
+        document.getElementById('resultsInpts').style.display = 'flex'
+
+        document.getElementById('cont').style.display = 'none'
+        document.getElementById('MovieImg').style.display = 'flex'
+    }
+
+    function loseGame()
+    {
+        console.log('Wrong')
+
+        document.getElementById('gameInpts').style.display = 'none'
+        document.getElementById('resultsInpts').style.display = 'flex'
+
+        document.getElementById('cont').style.display = 'none'
+        document.getElementById('MovieImg').style.display = 'flex'
+    }
+
+</script>
+</html>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+    body{
+        background-color: #262B3C;
+
+        font-family: "Jost", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: bolder;
+        font-style: normal;
+    }
+
+    ::placeholder {
+        color: #5A33C8;
+        font-weight: bold;
+    }
+
+    .btn{
+        background-color: #262E4A;
+    }
+
+    .btnTxt{
+        color: #5A33C8;
+    }
+
+    .btn:hover{
+        background-color: #5A33C8;
+    }
+    
+    .btnTxt:hover{
+        color: #262E4A;
+    }
+</style>
