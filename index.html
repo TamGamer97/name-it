@@ -31,10 +31,12 @@
                 </div>
     
                 <div style=" display: flex; flex-direction: row; gap: 10px; margin-top: 20px;">
-                    <input list="movies" id="movie" type="text" placeholder="Guess a movie..." style="border: none; outline: none; border-radius: 20px; background-color: #262E4A; width: 450px; height: 45px; padding-left: 20px; color: #5A33C8; font-size: 20px;">
-                    <datalist id="movies"></datalist>
-    
-                    <div onclick="guessMovie()" class="btn" id="guessBtn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; ">
+                    <div class="input-container">
+                        <input list="movies" id="movie" type="text" autocomplete="off" placeholder="Guess a movie..." style="border: none; outline: none; border-radius: 20px; background-color: #262E4A; width: 450px; height: 45px; padding-left: 20px; color: #5A33C8; font-size: 20px;">
+                        <ul id="suggestions" class="suggestions-list"></ul>
+                    </div>
+
+                    <div onclick="guessMovie()" class="btn" id="guessBtn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; margin-left: 20px; ">
                         <h1 class="btnTxt" style="font-size: 20px; text-align: center; transition: 1s;">Guess</h1>
                     </div>
                     <div onclick="location.reload()" class="btn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; display: none;">
@@ -126,12 +128,52 @@
             
             movies = data
             
-            const datalist = document.getElementById('movies');
+            // const datalist = document.getElementById('movies');
     
-            movies.forEach(movie => {
-                const option = document.createElement('option');
-                option.value = movie;
-                datalist.appendChild(option);
+            // movies.forEach(movie => {
+            //     const option = document.createElement('option');
+            //     option.value = movie;
+            //     datalist.appendChild(option);
+            // });
+
+            const searchInput = document.getElementById('movie');
+            const suggestionsList = document.getElementById('suggestions');
+
+            // const suggestions = ['apple', 'banana', 'orange', 'grape', 'mango', 'pear'];
+            const suggestions = movies
+
+            searchInput.addEventListener('input', () => {
+                const inputValue = searchInput.value.toLowerCase();
+                suggestionsList.innerHTML = '';
+                
+                if (inputValue) {
+                    const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(inputValue));
+                    
+                    filteredSuggestions.forEach(suggestion => {
+                        const li = document.createElement('li');
+                        li.textContent = suggestion;
+                        li.addEventListener('click', () => {
+                            searchInput.value = suggestion;
+                            suggestionsList.innerHTML = '';
+                            suggestionsList.style.display = 'none';
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                    
+                    if (filteredSuggestions.length > 0) {
+                        suggestionsList.style.display = 'block';
+                    } else {
+                        suggestionsList.style.display = 'none';
+                    }
+                } else {
+                    suggestionsList.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!event.target.closest('.input-container')) {
+                    suggestionsList.style.display = 'none';
+                }
             });
         })
 
@@ -273,6 +315,7 @@
         document.getElementById('MovieImg').style.display = 'flex'
     }
 
+
 </script>
 </html>
 
@@ -309,4 +352,51 @@
         }
     }
     
+
+    .input-container {
+        position: relative;
+        width: 450px; /* Match the width of the input */
+    }
+    .suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #5A33C8;
+    background: #262E4A;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    z-index: 1000;
+    border-radius: 0 0 20px 20px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 100px; /* Set a maximum height */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #5A33C8 #262E4A; /* For Firefox */
+}
+
+/* Styling for Webkit browsers (Chrome, Safari, etc.) */
+.suggestions-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.suggestions-list::-webkit-scrollbar-track {
+    background: #262E4A;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb {
+    background-color: #5A33C8;
+    border-radius: 4px;
+}
+
+.suggestions-list li {
+    padding: 8px 20px;
+    cursor: pointer;
+    color: #5A33C8;
+}
+
+.suggestions-list li:hover {
+    background: #323a5c;
+}
 </style>
