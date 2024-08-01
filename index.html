@@ -15,13 +15,14 @@
         color-stop(0.99, #340871)
         );
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent; text-align: center; font-size: 70px" >NAME IT!</h1>
+        -webkit-text-fill-color: transparent; text-align: center; font-size: 70px;-webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: yellow; margin-top: 70px; " >NAME IT!</h1>
 
-    <h1 id="stats" style="color: #8D65FF; text-align: center; font-size: 20px; position: absolute; right: 100px; top: 50px;" ></h1>
+    <h1 id="stats" class="stats" style="color: #8D65FF; text-align: center; font-size: 20px; position: absolute; right: 100px; top: 50px;" ></h1>
 
-    <img src="/infoIcon.png" onclick="document.getElementById('infoCont').style.display = 'flex'" class="infoBtn" style="position: absolute; right: 100px; width: 50px; top: 130px;">
+    <img src="/infoIcon.png" id="infoIcon" onclick="document.getElementById('infoCont').style.display = 'flex'" class="infoBtn" style="position: absolute; right: 100px; width: 50px; top: 130px;">
     
-    <div id="infoCont" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(36, 30, 36, 0.396); z-index: 10000; display: none; justify-content: center; align-items: center;">
+    <div id="infoCont" style="position: absolute; top: 0px; left: 0px; height: 100%; background-color: rgba(36, 30, 36, 0.396); z-index: 10000; display: none; justify-content: center; align-items: center;">
         <div style="width: 900px; border-radius: 20px; height: 500px; position: relative; display: flex; justify-content: center; background-color: #262B3C;">
             <h1 style="color: #8D65FF; text-align: center; width: 90%;">Welcome to Name It! The Movie Quote Game. <br>
                 
@@ -50,7 +51,7 @@
         <div style="width: 100%; height: 55%; top: 250px;position: absolute; display: flex; justify-content: center; flex-direction: column; align-items: center;">
             
             <h1 class="arrow" onclick="cycleHints('up')" style="position: relative; bottom: 2%; z-index: 1000; margin-top: 20px;">&uarr;</h1>
-            <div id="cont" style="width: 650px; height: 350px; transition: 1s; display: flex; justify-content: center; align-items: center; flex-direction: column; position: relative; top: 00px;">
+            <div id="cont" style="width: 100%; height: 350px; transition: 1s; display: flex; justify-content: center; align-items: center; flex-direction: column; position: relative; top: 00px;">
                 <!-- Content of the 'cont' div remains unchanged -->
             </div>
             <h1 class="arrow" onclick="cycleHints('down')" style="position: relative; top: 2%; z-index: 1000; margin-bottom: 180px;">&darr;</h1>
@@ -61,8 +62,8 @@
                 </div>
     
                 <div style=" display: flex; flex-direction: row; gap: 10px; margin-top: 20px;">
-                    <div class="input-container">
-                        <input list="movies" id="movie" type="text" autocomplete="off" placeholder="Guess a movie..." style="border: none; outline: none; border-radius: 20px; background-color: #262E4A; width: 450px; height: 45px; padding-left: 20px; color: #5A33C8; font-size: 20px;">
+                    <div class="input-container" id="input-container">
+                        <input list="movies" id="movie" class="movieInp" type="text" autocomplete="off" placeholder="Guess a movie..." style="border: none; outline: none; border-radius: 20px; width: 450px; background-color: #262E4A; height: 45px; padding-left: 20px; color: #5A33C8; font-size: 20px;">
                         <ul id="suggestions" class="suggestions-list"></ul>
                     </div>
 
@@ -431,6 +432,25 @@
         }
     }
 
+    window.addEventListener('resize', resizeElements)
+
+    function resizeElements()
+    {
+        if(window.innerWidth < 700)
+        {
+            console.log('Shrink')
+            document.getElementById('input-container').style.width = '300px'
+            document.getElementById('movie').style.width = '300px'
+            
+            document.getElementById('stats').style.top = '0px'
+            document.getElementById('stats').style.right = '10px'
+            
+            document.getElementById('infoIcon').style.top = '10px'
+        }
+    }
+
+    resizeElements()
+
 
 </script>
 </html>
@@ -530,4 +550,21 @@
     opacity: 0.6;
     cursor: pointer;
 }
+
+
+/* .movieInp{
+    width: 450px;
+}
+
+@media screen and (max-width: 610px) {
+
+    .input-container{
+        width: 300px;
+    }
+
+    .movieInp{
+        width: 300px;
+    }
+
+} */
 </style>
