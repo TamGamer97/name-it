@@ -152,12 +152,16 @@
             wordIndex = getWordOfTheDay()
             // const randomIndx = (Math.floor(Math.random() * data.length))
             movieData = data[wordIndex]
-            
-            const played = Cookies.get('played')
 
-            if(played != undefined)
+            document.getElementById('MovieImg').src = movieData.ImageURL
+            document.getElementById('movieName').innerHTML = movieData.Name
+            
+            const wi = Cookies.get('wordIndex')
+            console.log('wordIndex')
+            console.log(wordIndex)
+            if(wi != undefined)
             {
-                if(played == wordIndex)
+                if(wi == wordIndex)
                 {
                     loseGame('noCookies')
                     return   
@@ -166,9 +170,6 @@
 
 
 
-
-            document.getElementById('MovieImg').src = movieData.ImageURL
-            document.getElementById('movieName').innerHTML = movieData.Name
 
             nextHint()
             // Do something with your data
@@ -360,7 +361,8 @@
     {
         console.log('Correct')
 
-        Cookies.set('played', wordIndex)
+        console.log('setting wi to ' + wordIndex)
+        Cookies.set('wordIndex', wordIndex)
 
         const played = Cookies.get('played')
         const wins = Cookies.get('wins')
@@ -382,7 +384,8 @@
 
     function loseGame(noCookies)
     {
-        Cookies.set('played', wordIndex)
+        console.log('setting wi to ' + wordIndex)
+        Cookies.set('wordIndex', wordIndex)
         const played = Cookies.get('played')
         if(!noCookies)
         {
