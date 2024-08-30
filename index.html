@@ -252,6 +252,8 @@
     loadMoviesSuggestions()
 
     var hintCount = 0
+    var arrowGapSize = 20
+
     function nextHint()
     {
         const container = document.getElementById('cont').children
@@ -325,7 +327,7 @@
         // newHintTxt.style.fontSize = ((JSON.parse(newHintTxt.style.fontSize.split('px')[0])) * (0.9/(lineHeight/oneLineHeight))) + 'px'
 
 
-        document.getElementById('arrowPadding').style.padding = (20 * lineHeight/oneLineHeight) + 'px'
+        document.getElementById('arrowPadding').style.padding = (arrowGapSize * lineHeight/oneLineHeight) + 'px'
         setTimeout(() => {
             newHintTxt.style.opacity = 1
             newHintTxt.style.marginBottom = '50px'
@@ -550,6 +552,8 @@
         {
             document.getElementById('arrowCont').style.bottom = '70px'
             document.getElementById('cont').style.bottom = '-20px'
+
+            arrowGapSize = 10
         }
         if(window.innerHeight > 550)
         {
