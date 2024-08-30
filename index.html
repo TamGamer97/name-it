@@ -47,18 +47,22 @@
         
         <div id="divSec" style="width: 100%; height: 55%; top: 250px;position: absolute; display: flex; justify-content: center; flex-direction: column; align-items: center;">
             
-            <h1 class="arrow" id="arrow1" onclick="cycleHints('up')" style="position: relative; bottom: 2%; z-index: 1000; margin-top: 20px;">&uarr;</h1>
-            <div id="cont" style="width: 100%; height: 350px; transition: 1s; display: flex; justify-content: center; align-items: center; flex-direction: column; position: relative; top: 00px; font-size: 22px;">
+            <div id="arrowCont" style="position: absolute; width: 500px; height: 200px; display: flex; justify-content: center; align-items: center; flex-direction: column; bottom: 180px;">
+                <h1 class="arrow" id="arrow1" onclick="cycleHints('up')" style=" z-index: 1000; transition: 1s;">&uarr;</h1>
+                <div id="arrowPadding" style="width: 200px; padding: 0px; transition: 1s;"></div>
+                <h1 class="arrow" id="arrow2" onclick="cycleHints('down')" style=" z-index: 1000; transition: 1s;">&darr;</h1>
+            </div>
+            
+            <div id="cont" style="width: 100%; height: 350px; transition: 1s; display: flex; justify-content: center; align-items: center; flex-direction: column; position: absolute; font-size: 22px; bottom: 90px;">
                 <!-- Content of the 'cont' div remains unchanged -->
             </div>
-            <h1 class="arrow" id="arrow2" onclick="cycleHints('down')" style="position: relative; top: 2%; z-index: 1000; margin-bottom: 180px;">&darr;</h1>
 
             <div id="gameInpts" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
                 <div id="hintBtn" onclick="nextHint()" class="btn" style="width: 100px; height: 50px; border-radius: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 1s; display: none;">
                     <h1 class="btnTxt" style="font-size: 20px; text-align: center; height: 100%; width: 100%; padding-top: 20px; transition: 1s;">Hint</h1>
                 </div>
     
-                <div style=" display: flex; flex-direction: row; gap: 10px; margin-top: 20px;">
+                <div style=" display: flex; flex-direction: row; gap: 10px; margin-top: 300px;">
                     <div class="input-container" id="input-container">
                         <input list="movies" id="movie" class="movieInp" type="text" autocomplete="off" placeholder="Guess a movie..." style="border: none; outline: none; border-radius: 20px; width: 450px; background-color: #262E4A; height: 45px; padding-left: 20px; color: #5A33C8; font-size: 20px;">
                         <ul id="suggestions" class="suggestions-list"></ul>
@@ -98,6 +102,9 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 <script>
+
+    // - Search bar not selectable after first 2 options and not able to scroll
+    // Arrow spacing issues, they show up in the middle of the quotes/hints.
 
     var movieData = []
 
@@ -291,11 +298,34 @@
 
         }else{
 
-            newHintTxt.style = "text-align: center; transition: 1s; position: absolute; opacity: 0; margin-bottom: 00px;"
+            newHintTxt.style = "text-align: center; transition: 1s; position: absolute; opacity: 0; margin-bottom: 0px; width: 100vw"
             newHintTxt.innerHTML = ' <span style="color: #5A33C8;">Quote '+hintCount+':</span> <span style="color: #8D65FF;">"'+movieData['Quote'+JSON.stringify(hintCount)]+'"</span>'
+            
+            // if(movieData['Quote'+JSON.stringify(hintCount)].length > 15)
+            // {
+            //     newHintTxt.style.fontSize = '1.3em'                
+            // }
             document.getElementById('cont').appendChild(newHintTxt)
+
         }
         
+        newHintTxt.style.fontSize = window.innerWidth * 0.035 + 'px'
+        if(newHintTxt.style.fontSize.split('px')[0] > 35.98)
+        {
+            newHintTxt.style.fontSize = 35.98 + 'px'
+        }
+        
+        // var count = newHintTxt.length + newHintTxt.value.replace(/[^\n]/g, '').length;
+        // console.log(count)
+        const oneLineHeight = 1.44
+        const lineHeight = (newHintTxt.children[1].getBoundingClientRect().height / (window.innerWidth * 0.035)).toFixed(2)
+        
+        console.log('lines: ' + lineHeight/oneLineHeight)
+
+        // newHintTxt.style.fontSize = ((JSON.parse(newHintTxt.style.fontSize.split('px')[0])) * (0.9/(lineHeight/oneLineHeight))) + 'px'
+
+
+        document.getElementById('arrowPadding').style.padding = (20 * lineHeight/oneLineHeight) + 'px'
         setTimeout(() => {
             newHintTxt.style.opacity = 1
             newHintTxt.style.marginBottom = '50px'
@@ -479,6 +509,7 @@
 
     function resizeElements()
     {
+        console.log('resize')
         if(window.innerWidth < 700)
         {
             console.log('Shrink')
@@ -505,13 +536,25 @@
             document.getElementById('cont').style.fontSize= '18px   '
         }
 
-        if(window.innerWidth > window.innerHeight && window.innerHeight < 350)
+        // if(window.innerWidth > window.innerHeight && window.innerHeight < 350)
+        // {
+        //     console.log('extra space')
+
+        //     // document.getElementById('cont').style.marginTop = '50px'
+
+        //     document.getElementById('arrow1').style.marginTop = '100px'
+        // }
+
+
+        if(window.innerHeight < 550)
         {
-            console.log('extra space')
-
-            // document.getElementById('cont').style.marginTop = '50px'
-
-            document.getElementById('arrow1').style.marginTop = '100px'
+            document.getElementById('arrowCont').style.bottom = '70px'
+            document.getElementById('cont').style.bottom = '-20px'
+        }
+        if(window.innerHeight > 550)
+        {
+            document.getElementById('arrowCont').style.bottom = '180px'
+            document.getElementById('cont').style.bottom = '90px'
         }
     }
 
