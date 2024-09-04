@@ -68,7 +68,7 @@
                         <ul id="suggestions" class="suggestions-list"></ul>
                     </div>
 
-                    <div onclick="guessMovie()" class="btn" id="guessBtn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; margin-left: 20px; z-index: 500000; ">
+                    <div onclick="guessMovie()" class="btn" id="guessBtn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; margin-left: 20px; z-index: 10000000;">
                         <h1 class="btnTxt" style="font-size: 20px; text-align: center; transition: 1s;">Guess</h1>
                     </div>
                     <div onclick="location.reload()" class="btn" style="width: 100px; height: 50px; border-radius: 20px; transition: 1s; cursor: pointer; display: none;">
@@ -82,10 +82,10 @@
             </div>
 
             <div id="resultsInpts" style="display: none; justify-content: center; flex-direction: column; align-items: center;">
-                <h1 id="movieName" style="font-size: 30px; color: #5A33C8; text-align: center; height: 100%; width: 100%; transition: 1s;">Movie Name</h1>
+                <h1 id="movieName" style="font-size: 30px; color: #5A33C8; text-align: center; height: 100%; width: 100%; transition: 1s; position: absolute; top: 150px; z-index: 1000000;">Movie Name</h1>
 
 
-                <img src="" id="MovieImg" style="width: 550px; display: none;">
+                <img src="" id="MovieImg" style="width: 550px; display: none; position: absolute; top: 260px;">
 
 
                 <div onclick="location.reload()" class="btn" style="width: 150px; height: 50px; border-radius: 20px; display: none; justify-content: center; align-items: center; cursor: pointer; transition: 1s;">
@@ -540,13 +540,18 @@
 
         // if(window.innerWidth > window.innerHeight && window.innerHeight < 350)
         // {
-        //     console.log('extra space')
+        //     // console.log('extra space')
 
-        //     // document.getElementById('cont').style.marginTop = '50px'
+        //     // // document.getElementById('cont').style.marginTop = '50px'
 
-        //     document.getElementById('arrow1').style.marginTop = '100px'
+        //     // document.getElementById('arrow1').style.marginTop = '100px'
+
         // }
 
+        if(window.innerHeight > window.innerWidth)
+        {
+            arrowGapSize = 2
+        }
 
         if(window.innerHeight < 550)
         {
