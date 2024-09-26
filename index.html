@@ -427,7 +427,7 @@
 
         // Cookies.set('played', JSON.parse(played) + 1, wordIndex, { expires: 365 * 1000 })
         document.cookie = "played="+JSON.parse(JSON.parse(played) + 1)+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
-        document.cookie = "wins="+JSON.parse(wins) + 1+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
+        document.cookie = "wins="+JSON.parse(JSON.parse(wins) + 1)+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
         // Cookies.set('wins', JSON.parse(wins) + 1, wordIndex, { expires: 365 * 1000 })
 
         document.getElementById('gameInpts').style.display = 'none'
