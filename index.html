@@ -6,7 +6,7 @@
     <title>Home</title>
 </head>
 <body>
-    <h1 id="titleText" style="background-image: -webkit-gradient(
+    <h1 style="background-image: -webkit-gradient(
         linear,
         left top,
         right top,
@@ -120,14 +120,18 @@
         var played = Cookies.get('played')
         var wins = Cookies.get('wins')
 
-        if(!played)
+        console.log('je')
+        if(played == undefined)
         {
-            Cookies.set('played', 0)
+            document.cookie = "played="+0+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
+
             played = 0
         }
-        if(!wins)
+        if(wins == undefined)
         {
-            Cookies.set('wins', 0)   
+            // Cookies.set('wins', 0, wordIndex, { expires: 365 * 100 })   
+            document.cookie = "wins="+0+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
+
             wins = 0
         }
 
@@ -408,19 +412,23 @@
     {
         console.log('Correct')
 
-        document.getElementById('titleText').style.backgroundColor = 'yellow'
-        document.getElementById('titleText').style.borderColor = 'purple'
+        // document.getElementById('titleText').style.backgroundColor = 'yellow'
+        // document.getElementById('titleText').style.borderColor = 'purple'
 
         console.log('setting wi to ' + wordIndex)
-        Cookies.set('wordIndex', wordIndex)
+        // Cookies.set('wordIndex', wordIndex, { expires: 365 * 1000 })
+        document.cookie = "wordIndex="+wordIndex+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
 
-        document.getElementById('titleText').style = "background-image: -webkit-gradient(linear, left top, right top, color-stop(0.03, #8D65FF), color-stop(0.76, yellow), color-stop(0.99, yellow) ); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-size: 70px;-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: purple; margin-top: 70px; "
+
+        document.getElementById('movieName').style = "background-image: -webkit-gradient(linear, left top, right top, color-stop(0.03, #8D65FF), color-stop(0.76, yellow), color-stop(0.99, yellow) ); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-size: 70px;-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: purple; margin-top: 70px; "
 
         const played = Cookies.get('played')
         const wins = Cookies.get('wins')
 
-        Cookies.set('played', JSON.parse(played) + 1)
-        Cookies.set('wins', JSON.parse(wins) + 1)
+        // Cookies.set('played', JSON.parse(played) + 1, wordIndex, { expires: 365 * 1000 })
+        document.cookie = "played="+JSON.parse(JSON.parse(played) + 1)+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
+        document.cookie = "wins="+JSON.parse(wins) + 1+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
+        // Cookies.set('wins', JSON.parse(wins) + 1, wordIndex, { expires: 365 * 1000 })
 
         document.getElementById('gameInpts').style.display = 'none'
         document.getElementById('resultsInpts').style.display = 'flex'
@@ -437,10 +445,11 @@
     function loseGame(noCookies)
     {
         console.log('setting wi to ' + wordIndex)
-        Cookies.set('wordIndex', wordIndex)
+        // Cookies.set('wordIndex', wordIndex, wordIndex, { expires: 365 * 1000 })
+        document.cookie = "wordIndex="+wordIndex+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
 
         // document.getElementById('titleText').style.backgroundColor = 'yellow'
-        document.getElementById('titleText').style = "background-image: -webkit-gradient(linear, left top, right top, color-stop(0.03, #8D65FF), color-stop(0.76, yellow), color-stop(0.99, yellow) ); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; font-size: 70px;-webkit-text-stroke-width: 1px; -webkit-text-stroke-color: purple; margin-top: 70px; "
+        document.getElementById('movieName').style = "background-image: -webkit-gradient(linear, left top, right top, color-stop(0.03, yellow), color-stop(0.76, yellow), color-stop(0.99, yellow) ); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: blue; "
         // document.getElementById('titleText').style.borderColor = 'purple'
         // document.getElementById('titleText').style.color = 'yellow'
         // document.getElementById('titleText').style.borderWidth = '2px'
@@ -450,7 +459,8 @@
         if(!noCookies)
         {
             console.log('Wrong')
-            Cookies.set('played', JSON.parse(played) + 1)
+            // Cookies.set('played', JSON.parse(played) + 1, wordIndex, { expires: 365 * 1000 })
+            document.cookie = "played="+JSON.parse(JSON.parse(played) + 1)+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
         }
 
         document.getElementById('gameInpts').style.display = 'none'
