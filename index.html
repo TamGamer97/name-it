@@ -412,6 +412,8 @@
     {
         console.log('Correct')
 
+        alert('You Won')
+
         // document.getElementById('titleText').style.backgroundColor = 'yellow'
         // document.getElementById('titleText').style.borderColor = 'purple'
 
@@ -459,6 +461,7 @@
         if(!noCookies)
         {
             console.log('Wrong')
+            alert('You Lost')
             // Cookies.set('played', JSON.parse(played) + 1, wordIndex, { expires: 365 * 1000 })
             document.cookie = "played="+JSON.parse(JSON.parse(played) + 1)+"; expires=Fri, 1 Nov 9999 23:59:59 GMT";
         }
